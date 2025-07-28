@@ -113,3 +113,45 @@ async def load_metadata(request):
             f.write(meta["pysssss.sha256"])
 
     return web.json_response(meta)
+
+
+@PromptServer.instance.routes.get("/pysssss/local_metadata/{name}")
+async def load_local_metadata(request):
+    name = request.match_info["name"]
+    pos = name.index("/")
+    type = name[:pos]
+    name = name[pos+1:]
+
+    file_path = None
+    if type == "embeddings" or type == "loras":
+        name = name.lower()
+        files = folder_paths.get_filename_list(type)
+        for f in files:
+            lower_f = f.lower()
+            if lower_f == name:
+                file_path = folder_paths.get_full_path(type, f)
+            else:
+                n = os.path.splitext(f)[0].lower()
+                if n == name:
+                    file_path = folder_paths.get_full_path(type, f)
+
+            if file_path is not None:
+                break
+    else:
+        file_path = folder_paths.get_full_path(type, name)
+    if not file_path:
+        return web.Response(status=404)
+
+    file_no_ext = os.path.splitext(file_path)[0]
+    meta_path = None
+    if os.path.isfile(file_path + ".metadata.json"):
+        meta_path = file_path + ".metadata.json"
+    elif os.path.isfile(file_no_ext + ".metadata.json"):
+        meta_path = file_no_ext + ".metadata.json"
+    if not meta_path:
+        return web.Response(status=404)
+
+    with open(meta_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    return web.json_response(data)

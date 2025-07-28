@@ -214,19 +214,19 @@ export class ModelInfoDialog extends ComfyDialog {
 		);
 	}
 
-	async getCivitaiDetails() {
-		const req = await fetch("https://civitai.com/api/v1/model-versions/by-hash/" + this.hash);
-		if (req.status === 200) {
-			return await req.json();
-		} else if (req.status === 404) {
-			throw new Error("Model not found");
-		} else {
-			throw new Error(`Error loading info (${req.status}) ${req.statusText}`);
-		}
-	}
+       async getLocalMetadata() {
+               const req = await fetch("/pysssss/local_metadata/" + encodeURIComponent(this.type + "/" + this.name));
+               if (req.status === 200) {
+                       return await req.json();
+               } else if (req.status === 404) {
+                       throw new Error("Metadata not found");
+               } else {
+                       throw new Error(`Error loading info (${req.status}) ${req.statusText}`);
+               }
+       }
 
-	addCivitaiInfo() {
-		const promise = this.getCivitaiDetails();
+       addCivitaiInfo() {
+               const promise = this.getLocalMetadata();
 		const content = $el("span", { textContent: "ℹ️ Loading..." });
 
 		this.addInfoEntry(
