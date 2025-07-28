@@ -174,10 +174,8 @@ export class LoraInfoDialog extends ModelInfoDialog {
 		);
 
 		super.addInfo();
-		const p = this.addCivitaiInfo();
+		const info = await this.getLocalMetadata().catch(() => null);
 		this.addTags();
-
-		const info = await p;
 		this.addExample("Trained Words", info?.trainedWords?.join(", ") ?? "", "trainedwords");
 
 		const triggerPhrase = this.metadata["modelspec.trigger_phrase"];

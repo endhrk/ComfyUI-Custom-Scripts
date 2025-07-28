@@ -52,6 +52,7 @@ To quickly save a generated image as the preview to use for the model, you can r
 ![image](https://github.com/pythongosssss/ComfyUI-Custom-Scripts/assets/125205205/6b67bf40-ee17-4fa6-a0c1-7947066bafc2)
 ![image](https://github.com/pythongosssss/ComfyUI-Custom-Scripts/assets/125205205/32405df6-b367-404f-a5df-2d4347089a9e)  
 Adds "View Info" menu option to view details about the selected LoRA or Checkpoint. To view embedding details, click the info button when using embedding autocomplete.
+LoRA情報はローカルの `metadata.json` を参照します。
 
 ## Constrain Image
 Adds a node for resizing an image to a max & min size optionally cropping if required.
